@@ -1,0 +1,56 @@
+#include "assert.h"
+/*@ terminates \true;
+    exits \false;
+    assigns \nothing; */
+extern void abort(void);
+
+/*@ terminates \true;
+    exits \false; */
+void reach_error(void)
+{
+  __FC_assert(0 != 0,"distance_through_overflow.c",15,"0");
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+void __VERIFIER_assert(int cond)
+{
+  if (! cond) {
+    ERROR: {
+             reach_error();
+             abort();
+           }
+  }
+  return;
+}
+
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from \nothing;
+ */
+extern int __VERIFIER_nondet_int(void);
+
+/*@ terminates \true;
+    exits \false; */
+int main(void)
+{
+  int __retres;
+  int x = __VERIFIER_nondet_int();
+  int y = __VERIFIER_nondet_int();
+  if (x < y) abort();
+  /*@ assert
+      rte: signed_overflow:
+        -9223372036854775808 <= (long long)x - (long long)y;
+  */
+  /*@ assert
+      rte: signed_overflow:
+        (long long)x - (long long)y <= 9223372036854775807;
+  */
+  /*@ assert reachability: (long long)((unsigned int)x - (unsigned int)y) == (long long)x - (long long)y; */
+  __VERIFIER_assert((long long)((unsigned int)x - (unsigned int)y) == 
+                    (long long)x - (long long)y);
+  __retres = 0;
+  return __retres;
+}

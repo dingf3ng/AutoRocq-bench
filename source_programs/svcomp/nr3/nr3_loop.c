@@ -1,0 +1,164 @@
+/*@ terminates \true;
+    exits \false;
+    assigns \nothing; */
+extern void abort(void);
+
+/*@ terminates \false;
+    exits \false;
+    assigns \nothing; */
+extern  __attribute__((__noreturn__, __nothrow__)) void __assert_fail
+(char const *, char const *, unsigned int, char const *) __attribute__((__leaf__));
+
+/*@ terminates \true;
+    exits \false; */
+void reach_error(void)
+{
+  __assert_fail("0","nr3.c",(unsigned int)3,"reach_error");
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+void assume_abort_if_not(int cond)
+{
+  if (! cond) abort();
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+void __VERIFIER_assert(int cond)
+{
+  if (! cond) {
+    ERROR: {
+             reach_error();
+             abort();
+           }
+  }
+  return;
+}
+
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from \nothing;
+ */
+extern int __VERIFIER_nondet_int(void);
+
+int CELLCOUNT;
+/*@ terminates \true;
+    exits \false;
+    assigns \nothing;
+    frees p; */
+ __attribute__((__FC_BUILTIN__)) void __fc_vla_free(void *p);
+
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from \nothing;
+    allocates \result;
+ */
+ __attribute__((__FC_BUILTIN__)) void *__fc_vla_alloc(unsigned long size);
+
+/*@ terminates \true;
+    exits \false; */
+int main(void)
+{
+  int __retres;
+  CELLCOUNT = __VERIFIER_nondet_int();
+  if (CELLCOUNT > 1) {
+    int i;
+    int j;
+    unsigned long __lengthof_volArray;
+    int MINVAL = 2;
+    /*@
+    assert
+    alloca_bounds: 0 < sizeof(int) * CELLCOUNT <= 18446744073709551615; */
+    ;
+
+    assume_abort_if_not(CELLCOUNT <= 715827882); /* 715827882*3 < 2^31-1 */
+
+    __lengthof_volArray = (unsigned long)CELLCOUNT;
+    int *volArray = __fc_vla_alloc(sizeof(int) * __lengthof_volArray);
+    if (CELLCOUNT % 3 != 0) {
+      __retres = 1;
+      __fc_vla_free((void *)volArray);
+      goto return_label;
+    }
+    assume_abort_if_not(CELLCOUNT % 3 == 0);
+    i = 1;
+
+    /*@
+      loop invariant inv_i_bounds: 1 <= i && i <= (CELLCOUNT/3) + 1;
+      loop invariant inv_even_filled:
+        \forall integer q; 0 <= q < i-1 ==> 0 <= 3*q < CELLCOUNT && volArray[3*q] == 3;
+      loop invariant inv_mid_filled:
+        \forall integer q; 0 <= q < i-1 && 3*q+1 < CELLCOUNT ==> volArray[3*q+1] == 2;
+      loop invariant inv_odd_filled:
+        \forall integer q; 0 <= q < i-1 && 3*q+2 < CELLCOUNT ==> volArray[3*q+2] == 0;
+      loop invariant inv_three_i_nonneg: 0 <= 3*i;
+      loop invariant inv_three_i_upper: 3*i <= CELLCOUNT + 3;
+      loop assigns i, j, volArray[0 .. CELLCOUNT-1];
+      loop variant (CELLCOUNT/3) - (i-1);
+    */
+    while (i <= CELLCOUNT / 3) {
+      j = 3;
+      /*@
+        loop invariant inv_j_bounds: 1 <= j && j <= 3;
+        loop invariant inv_index_bounds: 0 <= (3*i - j) < CELLCOUNT;
+        loop assigns j, volArray[0 .. CELLCOUNT-1];
+        loop variant j;
+      */
+      while (j >= 1) {
+        if (j >= MINVAL) 
+          /*@ assert rte: signed_overflow: -2147483648 <= i * 3; */
+          /*@ assert rte: signed_overflow: i * 3 <= 2147483647; */
+          /*@ assert rte: signed_overflow: -2147483648 <= (int)(i * 3) - j; */
+          /*@ assert rte: signed_overflow: (int)(i * 3) - j <= 2147483647; */
+          *(volArray + (i * 3 - j)) = j;
+        else 
+          /*@ assert rte: signed_overflow: -2147483648 <= i * 3; */
+          /*@ assert rte: signed_overflow: i * 3 <= 2147483647; */
+          /*@ assert rte: signed_overflow: -2147483648 <= (int)(i * 3) - j; */
+          /*@ assert rte: signed_overflow: (int)(i * 3) - j <= 2147483647; */
+          *(volArray + (i * 3 - j)) = 0;
+        /*@ assert rte: signed_overflow: -2147483648 <= j - 1; */
+        j --;
+      }
+      /*@ assert rte: signed_overflow: i + 1 <= 2147483647; */
+      i ++;
+    }
+
+    /*@ assert fill_all_even:
+          \forall integer q; 0 <= q < CELLCOUNT/3 ==> volArray[3*q] == 3; */
+    /*@ assert fill_all_mid:
+          \forall integer q; 0 <= q && 3*q+1 < CELLCOUNT ==> volArray[3*q+1] == 2; */
+    /*@ assert fill_all_odd:
+          \forall integer q; 0 <= q && 3*q+2 < CELLCOUNT ==> volArray[3*q+2] == 0; */
+
+    i = 0;
+    /*@
+      loop invariant inv_scan_bounds: 0 <= i && i <= CELLCOUNT;
+      loop invariant inv_scan_prefix_ok:
+        \forall integer k; 0 <= k < i ==> volArray[k] == 0 || volArray[k] >= MINVAL;
+      loop assigns i;
+      loop variant CELLCOUNT - i;
+    */
+    while (i < CELLCOUNT) {
+      {
+        int tmp;
+        if (*(volArray + i) >= MINVAL) tmp = 1;
+        else 
+          if (*(volArray + i) == 0) tmp = 1; else tmp = 0;
+        /*@ assert reachability: tmp == 1; */
+        __VERIFIER_assert(tmp);
+      }
+      /*@ assert rte: signed_overflow: i + 1 <= 2147483647; */
+      i ++;
+    }
+    ;
+    __fc_vla_free((void *)volArray);
+  }
+  __retres = 1;
+  return_label: return __retres;
+}

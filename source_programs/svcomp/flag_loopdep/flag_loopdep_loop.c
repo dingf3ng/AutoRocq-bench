@@ -1,0 +1,100 @@
+#include "assert.h"
+struct __anonstruct_S_1 {
+   int *n ;
+};
+typedef struct __anonstruct_S_1 S;
+/*@ terminates \true;
+    exits \false;
+    assigns \nothing; */
+extern void abort(void);
+
+/*@ terminates \true;
+    exits \false; */
+void reach_error(void)
+{
+  __FC_assert(0 != 0,"flag_loopdep.c",3,"0");
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+void __VERIFIER_assert(int cond)
+{
+  if (! cond) {
+    ERROR: {
+             reach_error();
+             abort();
+           }
+  }
+  return;
+}
+
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from size;
+ */
+void *malloc(unsigned int size);
+
+/*@ terminates \true;
+    exits \false; */
+void init(S *a, int size)
+{
+  int i;
+  i = 0;
+  /*@
+    loop invariant 0 <= i <= size;
+    loop invariant \forall integer k; 0 <= k < i ==> (a + k)->n != (int *)'\000';
+    loop assigns i, a[0 .. size-1].n;
+    loop variant size - i;
+  */
+  while (i < size) {
+    (a + i)->n = (int *)malloc((unsigned int)sizeof(int));
+    /*@ assert rte: signed_overflow: i + 1 <= 2147483647; */
+    i ++;
+  }
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+int main(void)
+{
+  int __retres;
+  S a[1000000];
+  int i;
+  int flag;
+  flag = 0;
+  init(a,1000000);
+  i = 0;
+  /*@
+    loop invariant 0 <= i <= 1000000;
+    loop invariant 0 <= flag <= 1;
+    loop invariant \forall integer k; 0 <= k < i ==> (a[k].n != (int *)'\000') ==> flag == 1;
+    loop assigns i, flag;
+    loop variant 1000000 - i;
+  */
+  while (i < 1000000) {
+    if (a[i].n != (int *)'\000') flag = 1;
+    /*@ assert rte: signed_overflow: i + 1 <= 2147483647; */
+    i ++;
+  }
+  i = 0;
+  /*@
+    loop invariant 0 <= i <= 1000000;
+    loop invariant 0 <= flag <= 1;
+    loop invariant flag == 0 ==> \forall integer k; 0 <= k < i ==> a[k].n == (int *)'\000';
+    loop assigns i;
+    loop variant 1000000 - i;
+  */
+  while (i < 1000000) {
+    if (flag == 0) {
+      /*@ assert reachability: a[i].n == (int *)'\000'; */
+      __VERIFIER_assert(a[i].n == (int *)'\000');
+    }
+    /*@ assert rte: signed_overflow: i + 1 <= 2147483647; */
+    i ++;
+  }
+  __retres = 0;
+  return __retres;
+}

@@ -1,0 +1,164 @@
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from nmemb, size;
+ */
+extern void *calloc(unsigned int nmemb, unsigned int size);
+
+/*@ terminates \true;
+    exits \false;
+    assigns *((char *)__x0 + (0 ..));
+    assigns *((char *)__x0 + (0 ..)) \from *((char *)__x0 + (0 ..));
+ */
+extern void free(void *);
+
+/*@ terminates \true;
+    exits \false;
+    assigns \nothing; */
+extern void abort(void);
+
+/*@ terminates \false;
+    exits \false;
+    assigns \nothing; */
+extern  __attribute__((__noreturn__, __nothrow__)) void __assert_fail
+(char const *, char const *, unsigned int, char const *);
+
+/*@ terminates \true;
+    exits \false; */
+void reach_error(void)
+{
+  __assert_fail("0","duplets.c",(unsigned int)8,"reach_error");
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+void __VERIFIER_assert(int cond)
+{
+  if (! cond) {
+    reach_error();
+    abort();
+  }
+  return;
+}
+
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from \nothing;
+ */
+extern int __VERIFIER_nondet_int(void);
+
+/*@ terminates \true;
+    exits \false; */
+void assume_abort_if_not(int cond)
+{
+  if (! cond) abort();
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+void mkdup(int *a, int n)
+{
+  int tmp_1;
+  int tmp_2;
+  int i = __VERIFIER_nondet_int();
+  int j = __VERIFIER_nondet_int();
+  if (0 <= i) 
+    if (i < n) tmp_1 = 1; else tmp_1 = 0;
+  else tmp_1 = 0;
+  assume_abort_if_not(tmp_1);
+  if (0 <= j) 
+    if (j < n) tmp_2 = 1; else tmp_2 = 0;
+  else tmp_2 = 0;
+  assume_abort_if_not(tmp_2);
+  assume_abort_if_not(i != j);
+  int x = __VERIFIER_nondet_int();
+  /*@ assert valid_write_i: 0 <= i < n; */
+  *(a + i) = x;
+  /*@ assert valid_write_j: 0 <= j < n; */
+  *(a + j) = x;
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+int finddup(int *a, int n, int *_i, int *_j)
+{
+  int __retres;
+  int i;
+  int j;
+  i = 0;
+  /*@
+    loop invariant 0 <= i <= n;
+    loop assigns i, j, *_i, *_j, __retres;
+    loop variant n - i;
+  */
+  while (i < n) {
+    /*@ assert rte: signed_overflow: i + 1 <= 2147483647; */
+    j = i + 1;
+    /*@
+      loop invariant i+1 <= j <= n;
+      loop assigns j, *_i, *_j, __retres;
+      loop variant n - j;
+    */
+    while (j < n) {
+      /*@ assert valid_read_i: 0 <= i < n; */
+      /*@ assert valid_read_j: 0 <= j < n; */
+      if (*(a + i) == *(a + j)) {
+        *_i = i;
+        *_j = j;
+        __retres = 1;
+        goto return_label;
+      }
+      /*@ assert rte: signed_overflow: j + 1 <= 2147483647; */
+      j ++;
+    }
+    /*@ assert rte: signed_overflow: i + 1 <= 2147483647; */
+    i ++;
+  }
+  __retres = 0;
+  return_label: return __retres;
+}
+
+/*@ terminates \true;
+    exits \false; */
+int main(void)
+{
+  int __retres;
+  int tmp_0;
+  int i;
+  int j;
+  int tmp_3;
+  int tmp_4;
+  int n = __VERIFIER_nondet_int();
+  if (n >= 0) 
+    if (n < 1 << 30) tmp_0 = 1; else tmp_0 = 0;
+  else tmp_0 = 0;
+  assume_abort_if_not(tmp_0);
+  int *a = calloc((unsigned int)n,(unsigned int)sizeof(int));
+  mkdup(a,n);
+  int r = finddup(a,n,& i,& j);
+  /*@ assert reachability: r; */
+  __VERIFIER_assert(r);
+  if (0 <= i) 
+    if (i < n) tmp_3 = 1; else tmp_3 = 0;
+  else tmp_3 = 0;
+  /*@ assert reachability: tmp_3; */
+  __VERIFIER_assert(tmp_3);
+  if (0 <= j) 
+    if (j < n) tmp_4 = 1; else tmp_4 = 0;
+  else tmp_4 = 0;
+  /*@ assert reachability: tmp_4; */
+  __VERIFIER_assert(tmp_4);
+  /*@ assert reachability: i != j; */
+  __VERIFIER_assert(i != j);
+  /*@ assert valid_read_i_main: 0 <= i < n; */
+  /*@ assert valid_read_j_main: 0 <= j < n; */
+  /*@ assert reachability: *(a + i) == *(a + j); */
+  __VERIFIER_assert(*(a + i) == *(a + j));
+  free((void *)a);
+  __retres = 0;
+  return __retres;
+}

@@ -1,0 +1,78 @@
+#include "assert.h"
+/*@ terminates \true;
+    exits \false;
+    assigns \nothing; */
+extern void abort(void);
+
+/*@ terminates \true;
+    exits \false; */
+void reach_error(void)
+{
+  __FC_assert(0 != 0,"cancel_var_through_overflow.c",15,"0");
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+void __VERIFIER_assert(int cond)
+{
+  if (! cond) {
+    ERROR: {
+             reach_error();
+             abort();
+           }
+  }
+  return;
+}
+
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from \nothing;
+ */
+extern int __VERIFIER_nondet_int(void);
+
+/*@ terminates \true;
+    exits \false; */
+int main(void)
+{
+  int __retres;
+  int x = __VERIFIER_nondet_int();
+  int p0 = __VERIFIER_nondet_int();
+  int p1 = __VERIFIER_nondet_int();
+  if (p1 < p0) abort();
+
+  /*@ assert
+      rte: signed_overflow:
+        -2147483648 <= p1 - x;
+  */
+  /*@ assert
+      rte: signed_overflow:
+        p1 - x <= 2147483647;
+  */
+  /*@ assert
+      rte: signed_overflow:
+        -2147483648 <= x - p0;
+  */
+  /*@ assert
+      rte: signed_overflow:
+        x - p0 <= 2147483647;
+  */
+  unsigned int r =
+    ((unsigned int)p1 - (unsigned int)x) + ((unsigned int)x - (unsigned int)p0);
+
+  /*@ assert
+      rte: signed_overflow:
+        -9223372036854775808 <= (long long)p1 - (long long)p0;
+  */
+  /*@ assert
+      rte: signed_overflow:
+        (long long)p1 - (long long)p0 <= 9223372036854775807;
+  */
+
+  /*@ assert reachability: (long long)r == (long long)p1 - (long long)p0; */
+  __VERIFIER_assert((long long)r == (long long)p1 - (long long)p0);
+
+  __retres = 0;
+  return __retres;
+}

@@ -1,0 +1,61 @@
+#include "assert.h"
+/*@ terminates \true;
+    exits \false; */
+void reach_error(void)
+{
+  __FC_assert(0 != 0,"benchmark09_conjunctive.c",2,"0");
+  return;
+}
+
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from \nothing;
+ */
+extern int __VERIFIER_nondet_int(void);
+
+/*@ terminates \true;
+    exits \false; */
+void __VERIFIER_assert(int cond)
+{
+  if (! cond) reach_error();
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+int main(void)
+{
+  int __retres;
+  int x = __VERIFIER_nondet_int();
+  int y = __VERIFIER_nondet_int();
+  if (x == y) {
+    if (! (y >= 0)) {
+      __retres = 0;
+      goto return_label;
+    }
+  }
+  else {
+    __retres = 0;
+    goto return_label;
+  }
+  /*@
+    loop invariant inv: x <= y <= x && x >= 0 && y >= 0;
+    loop invariant inv2: x >= 0 && y >= 0;
+    loop assigns x, y;
+    loop variant x;
+  */
+  while (x != 0) {
+    /*@ assert rte: signed_overflow: -2147483648 <= x - 1; */
+    x --;
+    /*@ assert rte: signed_overflow: -2147483648 <= y - 1; */
+    y --;
+    if (x < 0) break;
+    else 
+      if (y < 0) break;
+  }
+  /*@ assert reachability: y == 0; */
+  __VERIFIER_assert(y == 0);
+  __retres = 0;
+  return_label: return __retres;
+}

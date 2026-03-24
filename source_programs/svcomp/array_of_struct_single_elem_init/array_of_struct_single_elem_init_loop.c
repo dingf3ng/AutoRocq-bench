@@ -1,0 +1,84 @@
+#include "assert.h"
+struct S {
+   int p ;
+   int n ;
+};
+/*@ terminates \true;
+    exits \false;
+    assigns \nothing; */
+extern void abort(void);
+
+/*@ terminates \true;
+    exits \false; */
+void reach_error(void)
+{
+  __FC_assert(0 != 0,"array_of_struct_single_elem_init.c",3,"0");
+  return;
+}
+
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from \nothing;
+ */
+extern int __VERIFIER_nondet_int(void);
+
+/*@ terminates \true;
+    exits \false; */
+void __VERIFIER_assert(int cond)
+{
+  if (! cond) {
+    ERROR: {
+             reach_error();
+             abort();
+           }
+  }
+  return;
+}
+
+struct S a[100000];
+/*@ terminates \true;
+    exits \false; */
+int main(void)
+{
+  int __retres;
+  int i;
+  i = 0;
+  /*@
+    loop invariant 0 <= i <= 100000;
+    loop assigns i, a[0 .. 99999];
+    loop variant 100000 - i;
+  */
+  while (i < 100000) {
+    {
+      struct S s;
+      int q = __VERIFIER_nondet_int();
+      s.n = __VERIFIER_nondet_int();
+      if (s.n == 0) s.p = 10; else s.p = 20;
+      a[i] = s;
+    }
+    /*@ assert rte: signed_overflow: i + 1 <= 2147483647; */
+    i ++;
+  }
+  a[3].p = 30;
+  a[3].n = 40;
+  i = 0;
+  /*@
+    loop invariant 0 <= i <= 100000;
+    loop assigns i;
+    loop variant 100000 - i;
+  */
+  while (i < 100000) {
+    {
+      struct S s1 = a[i];
+      if (i != 3) 
+        if (s1.n == 0) 
+          /*@ assert reachability: s1.p == 10; */
+          __VERIFIER_assert(s1.p == 10);
+    }
+    /*@ assert rte: signed_overflow: i + 1 <= 2147483647; */
+    i ++;
+  }
+  __retres = 0;
+  return __retres;
+}

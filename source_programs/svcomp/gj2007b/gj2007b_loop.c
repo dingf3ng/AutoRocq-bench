@@ -1,0 +1,54 @@
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from \nothing;
+ */
+extern int ( /* missing proto */ __VERIFIER_nondet_int)(void);
+
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from x_0;
+ */
+extern int ( /* missing proto */ __VERIFIER_assert)(int x_0);
+
+/*@ terminates \true;
+    exits \false; */
+int main(void)
+{
+  int __retres;
+  int tmp_1;
+  int tmp_2;
+  int x = 0;
+  int m = 0;
+  int n = __VERIFIER_nondet_int();
+
+  /*@
+    loop invariant 0 <= x <= n;
+    loop invariant -1 <= m < n || n <= 0;
+    loop assigns x, m;
+    loop variant n - x;
+  */
+  while (x < n) {
+    int tmp_0;
+    tmp_0 = __VERIFIER_nondet_int();
+    if (tmp_0) m = x;
+    /*@ assert rte: signed_overflow: x + 1 <= 2147483647; */
+    x ++;
+  }
+
+  /*@ assert reachability: (m >= 0) || (n <= 0); */
+  if (m >= 0) tmp_1 = 1;
+  else 
+    if (n <= 0) tmp_1 = 1; else tmp_1 = 0;
+  __VERIFIER_assert(tmp_1);
+
+  /*@ assert reachability: (m < n) || (n <= 0); */
+  if (m < n) tmp_2 = 1;
+  else 
+    if (n <= 0) tmp_2 = 1; else tmp_2 = 0;
+  __VERIFIER_assert(tmp_2);
+
+  __retres = 0;
+  return __retres;
+}

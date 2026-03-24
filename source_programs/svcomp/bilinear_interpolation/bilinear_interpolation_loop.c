@@ -1,0 +1,187 @@
+#include "assert.h"
+/*@ terminates \true;
+    exits \false;
+    assigns \nothing; */
+extern void abort(void);
+
+/*@ terminates \true;
+    exits \false; */
+void reach_error(void)
+{
+  __FC_assert(0 != 0,"bilinear_interpolation.c",15,"0");
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+void __VERIFIER_assert(int cond)
+{
+  if (! cond) {
+    ERROR: {
+             reach_error();
+             abort();
+           }
+  }
+  return;
+}
+
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from \nothing;
+ */
+extern int __VERIFIER_nondet_int(void);
+
+/*@ terminates \true;
+    exits \false; */
+int main(void)
+{
+  int __retres;
+  int tmp_5;
+  int tmp_6;
+  int tmp_7;
+  int tmp_8;
+  int tmp_9;
+  int x0 = __VERIFIER_nondet_int();
+  int x = __VERIFIER_nondet_int();
+  int x1 = __VERIFIER_nondet_int();
+  int y0 = __VERIFIER_nondet_int();
+  int y = __VERIFIER_nondet_int();
+  int y1 = __VERIFIER_nondet_int();
+  tmp_5 = __VERIFIER_nondet_int();
+  unsigned int z00 = (unsigned int)tmp_5;
+  tmp_6 = __VERIFIER_nondet_int();
+  unsigned int z01 = (unsigned int)tmp_6;
+  tmp_7 = __VERIFIER_nondet_int();
+  unsigned int z10 = (unsigned int)tmp_7;
+  tmp_8 = __VERIFIER_nondet_int();
+  unsigned int z11 = (unsigned int)tmp_8;
+
+  /*@ assert reachability: !(x0 > x); */
+  if (x0 > x) abort();
+  else 
+    /*@ assert reachability: !(x > x1); */
+    if (x > x1) abort();
+    else 
+      /*@ assert reachability: !(y0 > y); */
+      if (y0 > y) abort();
+      else 
+        /*@ assert reachability: !(y > y1); */
+        if (y > y1) abort();
+        else 
+          /*@ assert reachability: !(y0 >= y1); */
+          if (y0 >= y1) abort();
+          else 
+            /*@ assert reachability: !(x0 >= x1); */
+            if (x0 >= x1) abort();
+
+  /*@ assert
+      rte: division_by_zero:
+        (unsigned long long)((unsigned int)((unsigned int)y1 -
+                                            (unsigned int)y0))
+        ≢ 0;
+  */
+  /*@ assert
+      rte: division_by_zero:
+        (unsigned long long)((unsigned int)((unsigned int)x1 -
+                                            (unsigned int)x0))
+        ≢ 0;
+  */
+  /*@ assert
+      rte: division_by_zero:
+        (unsigned long long)((unsigned int)((unsigned int)y1 -
+                                            (unsigned int)y0))
+        ≢ 0;
+  */
+  /*@ assert
+      rte: division_by_zero:
+        (unsigned long long)((unsigned int)((unsigned int)x1 -
+                                            (unsigned int)x0))
+        ≢ 0;
+  */
+  /*@ assert
+      rte: division_by_zero:
+        (unsigned long long)((unsigned int)((unsigned int)y1 -
+                                            (unsigned int)y0))
+        ≢ 0;
+  */
+  /*@ assert
+      rte: division_by_zero:
+        (unsigned long long)((unsigned int)((unsigned int)x1 -
+                                            (unsigned int)x0))
+        ≢ 0;
+  */
+  /*@ assert
+      rte: division_by_zero:
+        (unsigned long long)((unsigned int)((unsigned int)y1 -
+                                            (unsigned int)y0))
+        ≢ 0;
+  */
+  /*@ assert
+      rte: division_by_zero:
+        (unsigned long long)((unsigned int)((unsigned int)x1 -
+                                            (unsigned int)x0))
+        ≢ 0;
+  */
+  long long r =
+    (long long)(((((unsigned long long)((unsigned int)x1 - (unsigned int)x) * (
+                   ((unsigned long long)((unsigned int)y1 - (unsigned int)y) * (unsigned long long)z00) / (unsigned long long)(
+                   (unsigned int)y1 - (unsigned int)y0))) / (unsigned long long)(
+                  (unsigned int)x1 - (unsigned int)x0) + ((unsigned long long)(
+                                                          (unsigned int)x - (unsigned int)x0) * (
+                                                          ((unsigned long long)(
+                                                           (unsigned int)y1 - (unsigned int)y) * (unsigned long long)z01) / (unsigned long long)(
+                                                          (unsigned int)y1 - (unsigned int)y0))) / (unsigned long long)(
+                                                         (unsigned int)x1 - (unsigned int)x0)) + 
+                 ((unsigned long long)((unsigned int)x1 - (unsigned int)x) * (
+                  ((unsigned long long)((unsigned int)y - (unsigned int)y0) * (unsigned long long)z10) / (unsigned long long)(
+                  (unsigned int)y1 - (unsigned int)y0))) / (unsigned long long)(
+                 (unsigned int)x1 - (unsigned int)x0)) + ((unsigned long long)(
+                                                          (unsigned int)x - (unsigned int)x0) * (
+                                                          ((unsigned long long)(
+                                                           (unsigned int)y - (unsigned int)y0) * (unsigned long long)z11) / (unsigned long long)(
+                                                          (unsigned int)y1 - (unsigned int)y0))) / (unsigned long long)(
+                                                         (unsigned int)x1 - (unsigned int)x0));
+  if ((long long)0 <= r) 
+    /*@ assert
+        rte: signed_overflow:
+          -9223372036854775808 ≤ (long long)z00 + (long long)z01;
+    */
+    /*@ assert
+        rte: signed_overflow:
+          (long long)z00 + (long long)z01 ≤ 9223372036854775807;
+    */
+    /*@ assert
+        rte: signed_overflow:
+          -9223372036854775808 ≤
+          (long long)((long long)z00 + (long long)z01) + (long long)z10;
+    */
+    /*@ assert
+        rte: signed_overflow:
+          (long long)((long long)z00 + (long long)z01) + (long long)z10 ≤
+          9223372036854775807;
+    */
+    /*@ assert
+        rte: signed_overflow:
+          -9223372036854775808 ≤
+          (long long)((long long)((long long)z00 + (long long)z01) +
+                      (long long)z10)
+          + (long long)z11;
+    */
+    /*@ assert
+        rte: signed_overflow:
+          (long long)((long long)((long long)z00 + (long long)z01) +
+                      (long long)z10)
+          + (long long)z11 ≤ 9223372036854775807;
+    */
+    if (r <= (((long long)z00 + (long long)z01) + (long long)z10) + (long long)z11) 
+      tmp_9 = 1;
+    else tmp_9 = 0;
+  else tmp_9 = 0;
+
+  /*@ assert reachability: tmp_9 == 1 || tmp_9 == 0; */
+  __VERIFIER_assert(tmp_9);
+
+  __retres = 0;
+  return __retres;
+}

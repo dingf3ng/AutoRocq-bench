@@ -1,0 +1,67 @@
+/*@ terminates \true;
+    exits \false;
+    assigns \nothing; */
+extern void abort(void);
+
+/*@ terminates \false;
+    exits \false;
+    assigns \nothing; */
+extern  __attribute__((__noreturn__, __nothrow__)) void __assert_fail
+(char const *, char const *, unsigned int, char const *) __attribute__((
+__leaf__));
+
+/*@ terminates \true;
+    exits \false; */
+void reach_error(void)
+{
+  __assert_fail("0","eq2.c",(unsigned int)3,"reach_error");
+  return;
+}
+
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from \nothing;
+ */
+extern unsigned int __VERIFIER_nondet_uint(void);
+
+/*@ terminates \true;
+    exits \false; */
+void __VERIFIER_assert(int cond)
+{
+  if (! cond) {
+    ERROR: {
+             reach_error();
+             abort();
+           }
+  }
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+int main(void)
+{
+  int __retres;
+  unsigned int w = __VERIFIER_nondet_uint();
+  unsigned int x = w;
+  unsigned int y = w + (unsigned int)1;
+  unsigned int z = x + (unsigned int)1;
+  /*@
+    loop invariant y - z == 0;
+    loop assigns y, z;
+  */
+  while (1) {
+    unsigned int tmp_0;
+    tmp_0 = __VERIFIER_nondet_uint();
+    if (! tmp_0) break;
+    /*@ assert rte: signed_overflow: y + 1 <= 4294967295; */
+    y ++;
+    /*@ assert rte: signed_overflow: z + 1 <= 4294967295; */
+    z ++;
+  }
+  /*@ assert reachability: y == z; */
+  __VERIFIER_assert(y == z);
+  __retres = 0;
+  return __retres;
+}

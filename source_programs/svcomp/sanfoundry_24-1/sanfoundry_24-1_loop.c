@@ -1,0 +1,111 @@
+#include "assert.h"
+/*@ terminates \true;
+    exits \false;
+    assigns \nothing; */
+extern void abort(void);
+
+/*@ terminates \true;
+    exits \false; */
+void reach_error(void)
+{
+  __FC_assert(0 != 0,"sanfoundry_24-1.c",3,"0");
+  return;
+}
+
+/*@ terminates \true;
+    exits \false;
+    assigns \result;
+    assigns \result \from \nothing;
+ */
+extern int __VERIFIER_nondet_int(void);
+
+/*@ terminates \true;
+    exits \false; */
+void __VERIFIER_assert(int cond)
+{
+  if (! cond) {
+    ERROR: {
+             reach_error();
+             abort();
+           }
+  }
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+void printEven(int i)
+{
+  /*@ assert reachability: i % 2 == 0; */
+  __VERIFIER_assert(i % 2 == 0);
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+void printOdd(int i)
+{
+  /*@ assert reachability: i % 2 != 0; */
+  __VERIFIER_assert(i % 2 != 0);
+  return;
+}
+
+/*@ terminates \true;
+    exits \false; */
+int main(void)
+{
+  int __retres;
+  int array[100000];
+  int i;
+  int num = __VERIFIER_nondet_int();
+
+  /*@ 
+    assert reachability: 0 <= num <= 100000; 
+  */
+  __VERIFIER_assert(0 <= num && num <= 100000);
+
+  i = 0;
+  /*@
+    loop invariant 0 <= i <= num <= 100000;
+    loop assigns i, array[0..num-1];
+    loop variant num - i;
+  */
+  while (i < num) {
+    array[i] = __VERIFIER_nondet_int();
+    /*@ assert rte: signed_overflow: i + 1 <= 2147483647; */
+    i ++;
+  }
+
+  i = 0;
+  /*@
+    loop invariant 0 <= i <= num <= 100000;
+    loop assigns i;
+    loop variant num - i;
+  */
+  while (i < num) {
+    if (array[i] % 2 == 0) {
+      /*@ assert reachability: array[i] % 2 == 0; */
+      printEven(array[i]);
+    }
+    /*@ assert rte: signed_overflow: i + 1 <= 2147483647; */
+    i ++;
+  }
+
+  i = 0;
+  /*@
+    loop invariant 0 <= i <= num <= 100000;
+    loop assigns i;
+    loop variant num - i;
+  */
+  while (i < num) {
+    if (array[i] % 2 != 0) {
+      /*@ assert reachability: array[i] % 2 != 0; */
+      printOdd(array[i]);
+    }
+    /*@ assert rte: signed_overflow: i + 1 <= 2147483647; */
+    i ++;
+  }
+
+  __retres = 0;
+  return __retres;
+}
