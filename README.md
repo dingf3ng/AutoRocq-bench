@@ -34,10 +34,13 @@ If you use our work for academic research, please cite our paper:
 
 ```
 @article{autorocq,
-  title={Agentic Program Verification},
+  title={Agentic Verification of Software Systems},
   author={Tu, Haoxin and Zhao, Huan and Song, Yahui and Zafar, Mehtab and Meng, Ruijie and Roychoudhury, Abhik},
-  journal={arXiv preprint arXiv:2511.17330},
-  year={2025}
+  journal={Proceedings of the ACM on Software Engineering},
+  volume={1},
+  number={FSE},
+  year={2026},
+  publisher={ACM New York, NY, USA}
 }
 ```
 
