@@ -154,7 +154,7 @@ Definition eqmem {a:Type} {a_WT:WhyType a} (m1: farray addr a) (m2:farray addr a
   forall (q:addr), (included q 1%Z p a1) -> ((m1 .[ q ]) = (m2 .[ q ])).
 
 (* Why3 goal *)
-Variable havoc: forall {a:Type} {a_WT:WhyType a}, (map.Map.map addr a) ->
+Parameter havoc: forall {a:Type} {a_WT:WhyType a}, (map.Map.map addr a) ->
   (map.Map.map addr a) -> addr -> Z -> map.Map.map addr a.
 
 Definition fhavoc {A : Type}

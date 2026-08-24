@@ -135,7 +135,7 @@ Remark two_power_nat_increase: forall n m,
   n <= m -> (two_power_nat n <= two_power_nat m)%Z.
 Proof.
   intros.
-  rewrite ((le_plus_minus n m) H).
+  replace m with (n + (m - n))%nat by lia.
   rewrite two_power_nat_plus.
   generalize (two_power_nat_is_positive (m - n)).
   pose (K:=(two_power_nat (m - n))); fold K; intro.  
@@ -148,7 +148,7 @@ Remark two_power_nat_increase_strict: forall n m,
   n < m -> (two_power_nat n < two_power_nat m)%Z.
 Proof.
   intros.
-  rewrite (le_plus_minus (n+1) m) by lia.
+  replace m with ((n + 1) + (m - (n + 1)))%nat by lia.
   rewrite two_power_nat_plus.
   generalize (two_power_nat_is_positive (m - (n+1))).
   pose (K:=(two_power_nat (m - (n+1)))); fold K; intro.  
@@ -1009,7 +1009,7 @@ Qed.
 
 (** The expected characteristic of binary decomposition of an integer *)
 Theorem Zbit_power: forall n k:nat,
-  Zbit (two_power_nat n) k = beq_nat n k.
+  Zbit (two_power_nat n) k = Nat.eqb n k.
 Proof.
   unfold two_power_nat. unfold Zbit. unfold bits_of_Z.
   simpl.

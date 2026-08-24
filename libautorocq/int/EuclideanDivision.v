@@ -76,12 +76,12 @@ destruct cases as [h4 | [h5 | h6]]; auto.
 assert (y * div x y <= y * (q - 1))%Z.
  apply  Zmult_le_compat_l; auto with zarith.
 replace (y*(q-1))%Z with (q*y - y)%Z in H by ring.
-elimtype False.
+exfalso.
 lia.
 assert (y * div x y >= y * (q + 1))%Z.
  apply  Zmult_ge_compat_l; auto with zarith.
 replace (y*(q+1))%Z with (q*y + y)%Z in H by ring.
-elimtype False.
+exfalso.
 lia.
 Qed.
 

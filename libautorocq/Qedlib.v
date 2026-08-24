@@ -99,10 +99,11 @@ Ltac case_eq x y :=
 Lemma Zneq_cases : forall x y, if Zneq_bool x y then x <> y else x = y.
 Proof.
   intros x y.
-  generalize (Zeq_bool_if x y).
-  unfold Zeq_bool.
   unfold Zneq_bool.
-  induction (x ?= y) ; auto.
+  destruct (x ?= y) eqn:Hcmp.
+  - now apply Z.compare_eq_iff.
+  - intros ->; now rewrite Z.compare_refl in Hcmp.
+  - intros ->; now rewrite Z.compare_refl in Hcmp.
 Qed.
 
 Ltac case_neq x y :=
@@ -147,15 +148,15 @@ Parameter Req_bool : R -> R -> bool.
 Parameter Rlt_bool : R -> R -> bool.
 Parameter Rle_bool : R -> R -> bool.
 Parameter Rneq_bool : R -> R -> bool.
-Hypothesis Rlt_boolean : boolean Rlt_bool Rlt.
-Hypothesis Rle_boolean : boolean Rle_bool Rle.
-Hypothesis Req_boolean : boolean Req_bool (fun x y => (x=y)).
-Hypothesis Rneq_boolean : boolean Rneq_bool (fun x y => (x<>y)).
+Axiom Rlt_boolean : boolean Rlt_bool Rlt.
+Axiom Rle_boolean : boolean Rle_bool Rle.
+Axiom Req_boolean : boolean Req_bool (fun x y => (x=y)).
+Axiom Rneq_boolean : boolean Rneq_bool (fun x y => (x<>y)).
 
 Parameter Aeq_bool : forall A : Set, A -> A -> bool.
-Hypothesis Aeq_boolean : forall A : Set, boolean (@Aeq_bool A) (fun x y => x=y).
+Axiom Aeq_boolean : forall A : Set, boolean (@Aeq_bool A) (fun x y => x=y).
 Definition Aneq_bool {A : Set} (x y : A) := negb (Aeq_bool x y).
-Hypothesis Aneq_boolean : forall A : Set, boolean (@Aneq_bool A) (fun x y => x<>y).
+Axiom Aneq_boolean : forall A : Set, boolean (@Aneq_bool A) (fun x y => x<>y).
 
 (** ** Integer Induction (after a given rank) *)
 
@@ -211,7 +212,7 @@ Record farray (A B : Type) := { whytype1 : BuiltIn.WhyType A ;
                                whytype2 : BuiltIn.WhyType B ;
                                access :> @Map.map A B }.
 Definition array (A : Type) := farray Z A.
-Hypothesis extensionality: forall (A B : Type) (f g : A -> B),
+Axiom extensionality: forall (A B : Type) (f g : A -> B),
   (forall x, f x = g x) -> f = g.
 
 

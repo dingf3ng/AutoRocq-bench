@@ -200,7 +200,7 @@ simpl; auto.
 simpl.
 intros.
 case Z.eq_dec.
-intros; elimtype False; destruct H.
+intros; exfalso; destruct H.
 omega.
 subst n0.
 auto with zarith.
