@@ -1347,4 +1347,4 @@ Qed.
 Ltac Zbit_ext k := apply Zbit_ext; extensionality k.
 
 Ltac auto_bits := autorewrite with bits ; auto with zarith.
-Hint Rewrite Zbit_of_zero Zbit_of_mone : bits.
+#[global] Hint Rewrite Zbit_of_zero Zbit_of_mone : bits.

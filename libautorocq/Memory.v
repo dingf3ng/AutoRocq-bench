@@ -30,6 +30,7 @@ Require int.Int.
 Require map.Map.
 
 Require Import ZArith.
+Require Import Lia.
 Require Import Qedlib.
 
 (* Why3 assumption *)
@@ -236,7 +237,7 @@ Proof.
   rewrite BaseP in BaseQ.
   contradiction.
   rewrite <- EQ in InQ1,InQ2.
-  omega.
+  lia.
 Qed.
 
 (* Why3 goal *)

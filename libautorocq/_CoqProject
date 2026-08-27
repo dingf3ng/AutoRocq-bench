@@ -12,6 +12,10 @@ Vlist.v
 Vset.v
 Cmath.v
 Cfloat.v
+Cint.v
+Cbits.v
+Zbits.v
+Memory.v
 
 bool/Bool.v
 
@@ -38,3 +42,4 @@ real/Square.v
 real/Trigonometry.v
 
 bv/Pow2int.v
+bv/BV_Gen.v
