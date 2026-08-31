@@ -34,10 +34,20 @@ Set Implicit Arguments.
 
 From Stdlib Require Import ZArith Lia.
 
-(* Rocq 8.17 deprecated relying on the implicit "auto with *" behind bare
-   `intuition`. Pin the solver to what the default already does, so the proofs
-   below keep their current behaviour. *)
-Ltac intuition_solver ::= auto with *.
+(* `intuition` is defined in Init/Tauto.v as a call to intuition_solver, whose
+   default body is
+
+     first [solve [auto] | tryif solve [auto with *] then warn_auto_with_star
+                                                     else idtac]
+
+   -- so the deprecation warning is raised by the solver itself, on every bare
+   `intuition` that plain `auto` cannot close. Rocq 9.x will drop the
+   `auto with *` branch. Redefine the body to the same thing minus the warning,
+   which keeps the proofs below on the exact search the default performs today.
+   (Rewriting the call sites to `intuition auto with *` instead does not work:
+   inside `replace ... by intuition` the explicit solver parses differently and
+   changes the hypothesis names `intros` goes on to produce.) *)
+Ltac intuition_solver ::= first [solve [auto] | solve [auto with *] | idtac].
 
 (** ** Tactical *)
 
