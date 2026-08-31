@@ -281,7 +281,7 @@ Proof.
 Qed.
 
 Require Import Qedlib.
-Require Import Lia.
+From Stdlib Require Import Lia.
 Local Open Scope Z_scope.
 Require Import Zbits.
 
@@ -336,7 +336,7 @@ Ltac unfold_bit_testb h :=
 
 (** Some useful properties *)
 Remark Zlt_bool_true_Zlt: forall (b:bool) (x y: Z),
-  (b = Zlt_bool x y)  <-> ((b = true) <-> x < y).
+  (b = Z.ltb x y)  <-> ((b = true) <-> x < y).
 Proof.
   intros.
   split; case_lt x y; intros; try rewrite H0.

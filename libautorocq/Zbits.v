@@ -40,11 +40,11 @@
 
 (** ** Tacticals *)
 
-Require Import ZArith.
-Require Import FunctionalExtensionality.
+From Stdlib Require Import ZArith.
+From Stdlib Require Import FunctionalExtensionality.
 Require Import Qedlib.
 Require Import Bits.
-Require Import Psatz.
+From Stdlib Require Import Psatz.
 
 From Stdlib Require Import ZArith Lia.
 
@@ -144,16 +144,16 @@ Proof.
   (** hyp 2 *) generalize (Zabs_pos n); lia.
 Qed.
 
-(** Some remarks about Zle_bool and Zlt_bool *)
+(** Some remarks about Z.leb and Z.ltb *)
   
 Remark Zle_2x: forall x:Z, 
-  Zle_bool 0 (2*x) = Zle_bool 0 x.
+  Z.leb 0 (2*x) = Z.leb 0 x.
 Proof.
   induction x; auto.
 Qed.
   
 Remark Zle_div2: forall x:Z,
-  Zle_bool 0 (x/2) = Zle_bool 0 x.
+  Z.leb 0 (x/2) = Z.leb 0 x.
 Proof.
   intro x.
   case_leq 0 (x/2); case_leq 0 x; try auto; intros; apply False_ind.
@@ -164,7 +164,7 @@ Proof.
 Qed.
 
 Remark Zlt_div2_neg: forall x:Z,
-    Zlt_bool (x/2) 0 = Zlt_bool x 0.
+    Z.ltb (x/2) 0 = Z.ltb x 0.
 Proof.
   intro x.
   case_lt (x/2) 0; case_lt x 0; intros; try auto.
@@ -705,7 +705,7 @@ Qed.
   
 Lemma Zbit_sign: forall (n: nat) (z: Z),
    let b := two_power_nat n
-   in -b <= z < b -> (Zbit z n = Zlt_bool z 0).
+   in -b <= z < b -> (Zbit z n = Z.ltb z 0).
 Proof.
   intro n.
   induction n; intro z; intro b; unfold b.
@@ -725,7 +725,7 @@ Qed.
 		
 Lemma Zbit_trail_plus: forall (n i: nat) (z: Z),
    let b := two_power_nat n
-   in -b <= z < b -> (Zbit z (n+i)%nat = Zlt_bool z 0).
+   in -b <= z < b -> (Zbit z (n+i)%nat = Z.ltb z 0).
 Proof.
   intro n. induction i; intros z b; unfold b.
   (** base *)
@@ -743,7 +743,7 @@ Qed.
 
 Lemma Zbit_trail: forall (n i: nat) (z: Z),
   let b := two_power_nat n
-  in (n <= i)%nat -> -b <= z < b -> (Zbit z i = Zlt_bool z 0).
+  in (n <= i)%nat -> -b <= z < b -> (Zbit z i = Z.ltb z 0).
 Proof. 
   intros. 
   generalize (Zbit_trail_plus n (i - n)%nat z).
@@ -758,7 +758,7 @@ Proof.
   (* work around a problem with "try lia" inside case_lt *)
   pose (b:=two_power_nat n); fold b.
   intro h2.
-  (replace false with (Zlt_bool z 0) by (case_lt z 0; auto)).
+  (replace false with (Z.ltb z 0) by (case_lt z 0; auto)).
   apply (Zbit_trail n); auto.
   fold b.
   lia.
@@ -766,7 +766,7 @@ Qed.
 
 Lemma Zbit_trail_plus_inv: forall (n: nat) (z: Z),
    let b := two_power_nat n
-   in (forall (i: nat), (Zbit z (n+i)%nat = Zlt_bool z 0)) -> -b <= z < b.
+   in (forall (i: nat), (Zbit z (n+i)%nat = Z.ltb z 0)) -> -b <= z < b.
 Proof.
   intro n. induction n; intro z; intro b; unfold b.
   (** base *)
@@ -847,7 +847,7 @@ Qed.
 
 Lemma Zbit_trail_inv: forall (n: nat) (z: Z),
   let b := two_power_nat n
-  in (forall (i: nat), (n <= i)%nat -> (Zbit z i = Zlt_bool z 0)) -> -b <= z < b.
+  in (forall (i: nat), (n <= i)%nat -> (Zbit z i = Z.ltb z 0)) -> -b <= z < b.
 Proof.
   intros n z b h1. 
   generalize (Zbit_trail_plus_inv n z); intro h2. 
@@ -1058,13 +1058,13 @@ Proof.
 Qed.
   
 Theorem Z_bitwise_sign: forall (f: bool -> bool -> bool) (x y: Z),  
-  Zle_bool 0 (Z_bitwise f x y) = negb (f (negb (Zle_bool 0 x)) (negb (Zle_bool 0 y))).
+  Z.leb 0 (Z_bitwise f x y) = negb (f (negb (Z.leb 0 x)) (negb (Z.leb 0 y))).
 Proof.
   intros f x y. 
   case_leq 0 (Z_bitwise f x y);
   unfold Z_bitwise; unfold Z_of_bits; unfold bitwise; simpl;
   repeat (rewrite Zsign_encoding); 
-  destruct (f (negb (Zle_bool 0 x)) (negb (Zle_bool 0 y))); intuition.
+  destruct (f (negb (Z.leb 0 x)) (negb (Z.leb 0 y))); intuition.
   + unfold zlnot in H;
     generalize (N_recomp_pos (last (fun i : nat => f (btest (bits_of_Z x) i) (btest (bits_of_Z y) i))
       (max (bsize (bits_of_Z x)) (bsize (bits_of_Z y))) true)
@@ -1235,7 +1235,7 @@ Definition lsl_def (x:Z) (n:Z): Z :=
   lsl_shift_def x (Z.abs_nat n).
 
 Definition lsl (x : Z) (y : Z) : Z :=
-  if Zle_bool 0 y then lsl_def x y
+  if Z.leb 0 y then lsl_def x y
   else lsl_undef x y.
 
 Theorem lsl_pos: forall x n: Z,
@@ -1257,7 +1257,7 @@ Definition lsr_def (x:Z) (n:Z): Z :=
   lsr_shift_def x (Z.abs_nat n).
 
 Definition lsr (x : Z) (y : Z) : Z :=
-  if Zle_bool 0 y then lsr_def x y
+  if Z.leb 0 y then lsr_def x y
   else lsr_undef x y.
 
 Theorem lsr_pos: forall x n: Z,
@@ -1271,7 +1271,7 @@ Qed.
 (** ** Properties of shifting operators *)
 
 Theorem Zbit_lsl: forall (x n: Z) (k: nat), 
-  Zbit (lsl_def x n) k = if (Zle_bool (Z.abs n) (Z_of_nat k)) then Zbit x (Z.abs_nat ((Z_of_nat k) - (Z.abs n))) else false.
+  Zbit (lsl_def x n) k = if (Z.leb (Z.abs n) (Z_of_nat k)) then Zbit x (Z.abs_nat ((Z_of_nat k) - (Z.abs n))) else false.
 Proof.
   intros. unfold lsl_def. 
   rewrite lsl_arithmetic_shift. unfold lsl_arithmetic_def.
@@ -2169,7 +2169,7 @@ Proof.
 Qed.					       				
        				     
 Definition bit_testb (x:Z) (n:Z): bool :=
-  if Zle_bool 0 n then zbit_test_def x n
+  if Z.leb 0 n then zbit_test_def x n
   else zbit_test_undef x n.
 						       
 Theorem bit_testb_pos: forall x n: Z,
@@ -2215,7 +2215,7 @@ Qed.
 (** ** Link between Bit extraction and bitwise shifting operators *)
 Theorem lsl_extraction: forall x n m: Z, 
   zbit_test_def (lsl_def x n) m =
-    if Zle_bool (Z.abs n) (Z.abs m)
+    if Z.leb (Z.abs n) (Z.abs m)
     then zbit_test_def x ((Z.abs m) - (Z.abs n))
     else false.
 Proof.

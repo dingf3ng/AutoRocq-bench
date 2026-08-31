@@ -21,8 +21,8 @@
 (**************************************************************************)
 
 Require Import Bool.
-Require Import ZArith.
-Require Import Reals.
+From Stdlib Require Import ZArith.
+From Stdlib Require Import Reals.
 
 Require BuiltIn.
 Require map.Map.
@@ -33,6 +33,11 @@ Set Implicit Arguments.
 
 
 From Stdlib Require Import ZArith Lia.
+
+(* Rocq 8.17 deprecated relying on the implicit "auto with *" behind bare
+   `intuition`. Pin the solver to what the default already does, so the proofs
+   below keep their current behaviour. *)
+Ltac intuition_solver ::= auto with *.
 
 (** ** Tactical *)
 
@@ -87,14 +92,24 @@ Definition boolean {A : Set}
               (f x y = false <-> ~(p x y)).
 *)
 
+(* Rocq 9.0 deprecated Zneq_bool and Zeq_bool_if. Keep local copies carrying
+   the same statements, so the case-analysis tactics below are unchanged. *)
+Definition Zneq_bool (x y : Z) : bool :=
+  match (x ?= y)%Z with Eq => false | _ => true end.
+
+Lemma Zeq_cases : forall x y, if Z.eqb x y then x = y else x <> y.
+Proof.
+  intros x y. now destruct (Z.eqb_spec x y).
+Qed.
+
 Ltac case_leq x y :=
-  generalize (Zle_cases x y) ; induction (Zle_bool x y) ; try lia.
+  generalize (Zle_cases x y) ; induction (Z.leb x y) ; try lia.
 
 Ltac case_lt x y :=
-  generalize (Zlt_cases x y) ; induction (Zlt_bool x y) ; try lia.
+  generalize (Zlt_cases x y) ; induction (Z.ltb x y) ; try lia.
 
 Ltac case_eq x y :=
-  generalize (Zeq_bool_if x y) ; induction (Zeq_bool x y) ; try lia.
+  generalize (Zeq_cases x y) ; induction (Z.eqb x y) ; try lia.
 
 Lemma Zneq_cases : forall x y, if Zneq_bool x y then x <> y else x = y.
 Proof.
@@ -123,7 +138,7 @@ Proof.
   intro H. exact (Case_gt H).
 Qed.
 
-Theorem Zeq_boolean : boolean Zeq_bool (fun x y => (x=y)).
+Theorem Zeq_boolean : boolean Z.eqb (fun x y => (x=y)).
 Proof.
   unfold boolean. intros x y. by (case_eq x y).
 Qed.
@@ -134,12 +149,12 @@ Proof.
   unfold boolean. intros x y. by (case_neq x y).
 Qed.
 
-Theorem Zlt_boolean : boolean Zlt_bool Z.lt.
+Theorem Zlt_boolean : boolean Z.ltb Z.lt.
 Proof.
   unfold boolean. intros x y. by (case_lt x y).
 Qed.
 
-Theorem Zle_boolean : boolean Zle_bool Z.le.
+Theorem Zle_boolean : boolean Z.leb Z.le.
 Proof.
   unfold boolean. intros x y. by (case_leq x y).
 Qed.

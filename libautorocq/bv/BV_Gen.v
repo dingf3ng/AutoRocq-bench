@@ -18,7 +18,7 @@ Require int.Int.
 Require int.Abs.
 Require int.EuclideanDivision.
 Require bv.Pow2int.
-Require Import Lia.
+From Stdlib Require Import Lia.
 
 Local Parameter last_bit : nat.
 (* Important notice: do not remove 'Local' above, otherwise 'why3 realize' will
@@ -41,6 +41,17 @@ Qed.
 Lemma size_pos : (0%Z < size)%Z.
   rewrite size_int_S; lia.
 Qed.
+
+(* Stdlib.Vectors.Bvector is deprecated since 8.20 in favour of [list bool].
+   The whole realization below is indexed by the vector length -- Bvector (S l),
+   Vector.last, `Fixpoint bvec_to_nat n (v : Bvector n) {struct v}`, and a proof
+   that unfolds Bvector itself -- so moving to the unindexed [list bool] is a
+   reimplementation of all 2154 lines, not a rename. Upstream has not settled a
+   replacement either ("Please open an issue if you would like to keep using
+   Bvector"), and nothing else in this tree requires bv/BV_Gen.v. Scope the two
+   Bvector warnings off here, pinned to their exact classes so every other
+   deprecation in this file still surfaces. *)
+Local Set Warnings "-deprecated-reference-since-8.20,-deprecated-library-file-since-8.20".
 
 From Stdlib Require Import Bvector.
 
@@ -966,7 +977,7 @@ match p with
             ((Vector.last prev) :: (Vector.shiftout prev))
 end.
 
-Lemma mod1_is_mod : forall x y, y > 0 -> mod1 x y = Zmod x y.
+Lemma mod1_is_mod : forall x y, y > 0 -> mod1 x y = Z.modulo x y.
   intros; unfold mod1, div.
   case Z_le_dec; intro.
   rewrite Z.mod_eq by lia; trivial.

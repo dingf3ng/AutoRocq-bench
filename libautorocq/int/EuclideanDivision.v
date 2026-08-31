@@ -23,7 +23,7 @@ From Stdlib Require Import ZArith Lia.
 (* Why3 goal *)
 Definition div : Numbers.BinNums.Z -> Numbers.BinNums.Z -> Numbers.BinNums.Z.
 intros x y.
-case (Z_le_dec 0 (Zmod x y)) ; intros H.
+case (Z_le_dec 0 (Z.modulo x y)) ; intros H.
 exact (Z.div x y).
 exact (Z.div x y + 1)%Z.
 Defined.

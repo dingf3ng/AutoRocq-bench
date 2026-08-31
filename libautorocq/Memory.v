@@ -29,8 +29,8 @@ Require bool.Bool.
 Require int.Int.
 Require map.Map.
 
-Require Import ZArith.
-Require Import Lia.
+From Stdlib Require Import ZArith.
+From Stdlib Require Import Lia.
 Require Import Qedlib.
 
 (* Why3 assumption *)
@@ -62,13 +62,13 @@ Defined.
 (* Why3 goal *)
 Definition addr_le_bool : addr -> addr -> bool.
   exact (fun (p q : addr) =>
-           andb (Zeq_bool (base p) (base q)) (Zle_bool (offset p) (offset q))).
+           andb (Z.eqb (base p) (base q)) (Z.leb (offset p) (offset q))).
 Defined.
 
 (* Why3 goal *)
 Definition addr_lt_bool : addr -> addr -> bool.
   exact (fun (p q : addr) =>
-           andb (Zeq_bool (base p) (base q)) (Zlt_bool (offset p) (offset q))).
+           andb (Z.eqb (base p) (base q)) (Z.ltb (offset p) (offset q))).
 Defined.
 
 (* Why3 goal *)
@@ -96,14 +96,14 @@ Proof.
   unfold addr_le. unfold addr_le_bool.
   intros. split; intro H.
   destruct H as [H0 H1].
-  rewrite Zeq_is_eq_bool in H0.
+  rewrite <- Z.eqb_eq in H0.
   apply Zle_imp_le_bool in H1.
   rewrite H0. rewrite H1.
   compute;reflexivity.
   symmetry in H.
   apply Bool.andb_true_eq in H.
   destruct H as [H1 H2].
-  split;[apply Zeq_bool_eq|apply Zle_bool_imp_le];symmetry; assumption.
+  split;[apply Z.eqb_eq|apply Zle_bool_imp_le];symmetry; assumption.
 Qed.
 
 (* Why3 goal *)
@@ -113,14 +113,14 @@ Proof.
   unfold addr_lt. unfold addr_lt_bool.
   intros. split; intro H.
   destruct H as [H0 H1].
-  rewrite Zeq_is_eq_bool in H0.
+  rewrite <- Z.eqb_eq in H0.
   rewrite Zlt_is_lt_bool in H1.
   rewrite H0. rewrite H1.
   compute;reflexivity.
   symmetry in H.
   apply Bool.andb_true_eq in H.
   destruct H as [H1 H2].
-  split;[apply Zeq_bool_eq|rewrite Zlt_is_lt_bool];symmetry; assumption.
+  split;[apply Z.eqb_eq|rewrite Zlt_is_lt_bool];symmetry; assumption.
 Qed.
 
 (* Why3 assumption *)

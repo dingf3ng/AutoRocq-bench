@@ -33,7 +33,7 @@ From Stdlib Require Import ZArith Lia.
 (* --- Lists for Why-3                                                --- *)
 (* ---------------------------------------------------------------------- *)
 
-Require List.
+From Stdlib Require List.
 Ltac seq := autorewrite with list ; auto with zarith.
 Hint Rewrite List.app_assoc List.app_nil_l List.app_nil_r : list.
 
@@ -41,7 +41,7 @@ Hint Rewrite List.app_assoc List.app_nil_l List.app_nil_r : list.
   (* --- Classical Lists for Alt-Ergo                                 --- *)
   (* -------------------------------------------------------------------- *)
 Require Import Qedlib.
-Require Import Lia.
+From Stdlib Require Import Lia.
 
 (* Why3 goal *)
 Definition list : forall (a:Type), Type.
@@ -127,7 +127,7 @@ Proof.
   + Import List.ListNotations.
     assert (0 < Z.of_nat (Datatypes.length (a0 :: w))).
     { replace (Datatypes.length (a0 :: w)) with (1 + Datatypes.length (w))%nat
-        by( (replace (a0 :: w) with ([a0] ++ w) by seq); rewrite List.app_length; by seq).
+        by( (replace (a0 :: w) with ([a0] ++ w) by seq); rewrite List.length_app; by seq).
       assert (0 <= Z.of_nat (Datatypes.length w)) by apply Zle_0_nat.
       replace (Z.of_nat (1 + Datatypes.length w)) with (1 + Z.of_nat (Datatypes.length w)).
       { lia. }

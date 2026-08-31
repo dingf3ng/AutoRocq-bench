@@ -54,8 +54,8 @@ Definition Zfc := nat -> bool.
 	   
 (** ** Tacticals *)
 
-Require Import ZArith.
-Require Import FunctionalExtensionality.
+From Stdlib Require Import ZArith.
+From Stdlib Require Import FunctionalExtensionality.
 Require Import Qedlib.
 
 From Stdlib Require Import ZArith Lia.
@@ -718,7 +718,7 @@ Qed.
 
 (** Bits decomposition of [Z] integers *)
 Program Definition bits_of_Z (x:Z): bits :=		       
-  if (Zle_bool 0 x) 
+  if (Z.leb 0 x) 
   then let n := Nabs x in
        mkbits (NxHpos n) false (N_decomp n) (Zpos_decomp_trail n)
   else let n := Nabs (zlnot x) in
@@ -956,14 +956,14 @@ Qed.
 
 (** Sign encoding *)
 Lemma Zsign_encoding: forall z:Z,
-  bsign (bits_of_Z z) = negb (Zle_bool 0 z).
+  bsign (bits_of_Z z) = negb (Z.leb 0 z).
 Proof.
   intro z. unfold bits_of_Z. unfold bsign.
   case_leq 0 z; auto.
 Qed.
  
 Lemma bsign_encoding: forall b:bits,
-  bsign b = negb (Zle_bool 0 (Z_of_bits b)).
+  bsign b = negb (Z.leb 0 (Z_of_bits b)).
 Proof.
   intro b.
   rewrite <- Zsign_encoding.
@@ -1044,7 +1044,7 @@ Qed.
 			  
 (** * Position of the Highest Significant Bit in two's complement representation *)
 Definition ZxHpos (z:Z): nat := 
-  if (Zle_bool 0 z) then NxHpos (Nabs z) else NxHpos (Nabs (zlnot z)).
+  if (Z.leb 0 z) then NxHpos (Nabs z) else NxHpos (Nabs (zlnot z)).
 
 (** Zero has no significant bit, as minus one *)
 Remark ZxHpos_is_zero: ZxHpos 0 = O /\ ZxHpos (-1) = O.

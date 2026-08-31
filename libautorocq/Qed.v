@@ -34,6 +34,11 @@ Require real.Real.
 Require real.RealInfix.
 Require real.FromInt.
 
+(* Rocq 8.17 deprecated relying on the implicit "auto with *" behind bare
+   `intuition`. Pin the solver to what the default already does, so rleq1
+   below keeps its current behaviour. *)
+Ltac intuition_solver ::= auto with *.
+
 (* Why3 goal *)
 Definition match_bool {a:Type} {a_WT:WhyType a} : bool -> a -> a -> a.
 exact (fun b x y => if b then x else y).
@@ -88,12 +93,12 @@ Qed.
 
 (* Why3 goal *)
 Definition zlt : Z -> Z -> bool.
-exact(Zlt_bool).
+exact(Z.ltb).
 Defined.
 
 (* Why3 goal *)
 Definition zleq : Z -> Z -> bool.
-exact(Zle_bool).
+exact(Z.leb).
 Defined.
 
 (* Why3 goal *)
@@ -210,7 +215,7 @@ Lemma cdiv_closed_remainder : forall (a:Z) (b:Z) (n:Z), (0%Z <= a)%Z ->
   (((ZArith.BinInt.Z.rem a n) = (ZArith.BinInt.Z.rem b n)) -> (a = b)))).
 Proof.
   intros a b n PA PB Range Rem.
-  Require Import ZArith.
+  From Stdlib Require Import ZArith.
   Open Scope Z_scope.
   pose (p := a/n).
   pose (q := b/n).

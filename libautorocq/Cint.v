@@ -31,7 +31,7 @@ Require int.Int.
 Definition is_bool (x:Z): Prop := (x = 0%Z) \/ (x = 1%Z).
 
 Require Import Qedlib.
-Require Import Lia.
+From Stdlib Require Import Lia.
 
 (** * remarks about two_power_nat *)
 Remark two_power_nat_is_positive: forall n,
