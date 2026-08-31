@@ -34,21 +34,6 @@ Require real.Real.
 Require real.RealInfix.
 Require real.FromInt.
 
-(* `intuition` is defined in Init/Tauto.v as a call to intuition_solver, whose
-   default body is
-
-     first [solve [auto] | tryif solve [auto with *] then warn_auto_with_star
-                                                     else idtac]
-
-   -- so the deprecation warning is raised by the solver itself, on every bare
-   `intuition` that plain `auto` cannot close. Rocq 9.x will drop the
-   `auto with *` branch. Redefine the body to the same thing minus the warning,
-   which keeps rleq1 below on the exact search the default performs today.
-   (Rewriting the call sites to `intuition auto with *` instead does not work:
-   inside `replace ... by intuition` the explicit solver parses differently and
-   changes the hypothesis names `intros` goes on to produce.) *)
-Ltac intuition_solver ::= first [solve [auto] | solve [auto with *] | idtac].
-
 (* Why3 goal *)
 Definition match_bool {a:Type} {a_WT:WhyType a} : bool -> a -> a -> a.
 exact (fun b x y => if b then x else y).
@@ -148,7 +133,7 @@ Qed.
 Lemma rleq1 : forall (x:R) (y:R), ((rleq x y) = true) <-> (x <= y)%R.
 Proof.
   intros x y.
-  compute;destruct (Rle_dec x y);intuition;discriminate.
+  compute;destruct (Rle_dec x y);intuition (auto with real);discriminate.
 Qed.
 
 (* Why3 assumption *)

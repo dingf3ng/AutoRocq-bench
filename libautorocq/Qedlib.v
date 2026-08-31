@@ -34,21 +34,6 @@ Set Implicit Arguments.
 
 From Stdlib Require Import ZArith Lia.
 
-(* `intuition` is defined in Init/Tauto.v as a call to intuition_solver, whose
-   default body is
-
-     first [solve [auto] | tryif solve [auto with *] then warn_auto_with_star
-                                                     else idtac]
-
-   -- so the deprecation warning is raised by the solver itself, on every bare
-   `intuition` that plain `auto` cannot close. Rocq 9.x will drop the
-   `auto with *` branch. Redefine the body to the same thing minus the warning,
-   which keeps the proofs below on the exact search the default performs today.
-   (Rewriting the call sites to `intuition auto with *` instead does not work:
-   inside `replace ... by intuition` the explicit solver parses differently and
-   changes the hypothesis names `intros` goes on to produce.) *)
-Ltac intuition_solver ::= first [solve [auto] | solve [auto with *] | idtac].
-
 (** ** Tactical *)
 
 Ltac forward :=
@@ -310,7 +295,7 @@ Proof.
   intros.
   destruct n as [|a|a] ;
   destruct d as [|b|b] ;
-  intuition ;
+  intuition (auto) ;
   by auto with zarith.
 Qed.
 
@@ -323,7 +308,7 @@ Proof.
   intros.
   destruct n as [|a|a] ;
   destruct d as [|b|b] ;
-  intuition ;
+  intuition (auto) ;
   by auto with zarith.
 Qed.
 
@@ -354,7 +339,7 @@ Proof.
   intros.
   destruct n as [|a|a] ;
   destruct d as [|b|b] ;
-  intuition ; simpl ; forward ;
+  intuition (auto) ; simpl ; forward ;
   generalize (Z_mod_lt (Zpos a) (Zpos b) (Zgt_pos_0 b)) ;
   repeat (replace (Zneg b) with (- Zpos b) by auto with zarith) ;
   intuition (auto with zarith).

@@ -533,7 +533,7 @@ Proof.
       replace (2*z + 0) with (2*z) in * by (auto with zarith).
       assert ((Zbit x O) = true).
       { rewrite Zbit_0. rewrite Zmod_odd in ODD.
-        destruct (Z.odd x); intuition. }
+        destruct (Z.odd x); intuition (auto with zarith). }
       assert (Zbit (2*z) O=true).
       { apply (H1 O); auto. }
       rewrite (Zbit_2x_0) in H3.
@@ -1456,7 +1456,7 @@ Proof.
     * apply (N_recomp_pos).
  + intro.
     unfold lor; rewrite Zbit_bitwise. 
-    destruct (Zbit x k); intuition.
+    destruct (Zbit x k); intuition (auto with zarith).
 Qed. 
 		    
 (** Zbit extraction *)
@@ -2307,7 +2307,7 @@ Proof.
     repeat (rewrite Zbit_0).
     rewrite (div2_odd_eq x) at 3. rewrite (div2_odd_eq y) at 3.
     clear H0.
-    destruct (Z.odd x); destruct (Z.odd y); intuition; try discriminate H0; 
+    destruct (Z.odd x); destruct (Z.odd y); intuition (auto); try discriminate H0; 
       repeat (rewrite Z.add_0_r); symmetry.
     * apply (Zdiv_unique (2 * (x / 2) + 1 + 2 * (y / 2)) 2 (x / 2 + y / 2) 1); auto with zarith.
     * apply (Zdiv_unique (2 * (x / 2) + (2 * (y / 2) + 1)) 2 (x / 2 + y / 2) 1); auto with zarith.

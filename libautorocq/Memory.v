@@ -293,7 +293,7 @@ Lemma included_trans :
   (included p a q b) -> (included q b r c) -> included p a r c.
 Proof.
   intros p a q b r c.
-  unfold included. intuition.
+  unfold included. intuition (auto with zarith).
 Qed.
 
 (* Why3 goal *)
