@@ -18,7 +18,7 @@ Require Import BuiltIn.
 Require BuiltIn.
 Require int.Int.
 Require int.Abs.
-From Coq Require Import ZArith Lia.
+From Stdlib Require Import ZArith Lia.
 
 (* Why3 goal *)
 Definition div : Numbers.BinNums.Z -> Numbers.BinNums.Z -> Numbers.BinNums.Z.

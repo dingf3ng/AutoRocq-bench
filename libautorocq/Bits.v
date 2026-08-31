@@ -58,7 +58,7 @@ Require Import ZArith.
 Require Import FunctionalExtensionality.
 Require Import Qedlib.
 
-From Coq Require Import ZArith Lia.
+From Stdlib Require Import ZArith Lia.
 
 
 Close Scope Z_scope.

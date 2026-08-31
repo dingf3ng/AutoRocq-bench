@@ -27,7 +27,7 @@ Require BuiltIn.
 Require int.Int.
 Require int.Abs.
 Require int.ComputerDivision.
-From Coq Require Import ZArith Lia.
+From Stdlib Require Import ZArith Lia.
 
 (* ---------------------------------------------------------------------- *)
 (* --- Lists for Why-3                                                --- *)

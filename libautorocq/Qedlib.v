@@ -32,7 +32,7 @@ Open Scope Z_scope.
 Set Implicit Arguments.
 
 
-From Coq Require Import ZArith Lia.
+From Stdlib Require Import ZArith Lia.
 
 (** ** Tactical *)
 

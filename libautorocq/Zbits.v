@@ -46,7 +46,7 @@ Require Import Qedlib.
 Require Import Bits.
 Require Import Psatz.
 
-From Coq Require Import ZArith Lia.
+From Stdlib Require Import ZArith Lia.
 
 
 Local Open Scope Z_scope.
